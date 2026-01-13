@@ -5,34 +5,12 @@ A bash script to automatically update an AWS Security Group inbound rule with yo
 ## Overview
 
 This script:
-1. Finds a Security Group by its description (`Scripted-972151`)
-2. Finds an inbound rule within that Security Group by rule description (`Dev-551836`)
-3. Gets your current external IP address
-4. Updates the rule's IP address (CIDR) with your current external IP
-5. Displays old and new IP addresses
-6. Tests TCP connectivity to port 3306 (if an instance is found using the SG)
+1. Gets your current external IP address
+2. Updates the wanted rule's IP address (CIDR) with your current external IP
+3. Displays old and new IP addresses
+4. Tests TCP connectivity to port 3306 (if an instance is found using the SG)
 
 ## Prerequisites
-
-### AWS CLI
-
-The script requires AWS CLI v2. Install using your package manager or from AWS:
-
-**Ubuntu/Debian:**
-```bash
-curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-unzip awscliv2.zip
-sudo ./aws/install
-```
-
-**macOS:**
-```bash
-curl "https://awscli.amazonaws.com/AWSCLIV2.pkg" -o "AWSCLIV2.pkg"
-sudo installer -pkg AWSCLIV2.pkg -target /
-```
-
-**Windows:**
-Download and run the installer from: https://awscli.amazonaws.com/AWSCLIV2.msi
 
 ### jq (JSON Processor)
 
@@ -65,47 +43,11 @@ sudo apt-get install -y curl
 brew install curl
 ```
 
-## AWS Configuration
-
-The script uses the **default** AWS profile. Configure it with:
-
-```bash
-aws configure
-```
-
-You will need to provide:
-- AWS Access Key ID
-- AWS Secret Access Key
-- Default region (e.g., `us-east-1`)
-- Default output format (recommended: `json`)
-
-### Required IAM Permissions
-
-The IAM user/role needs the following permissions:
-
-```json
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "ec2:DescribeSecurityGroups",
-                "ec2:DescribeSecurityGroupRules",
-                "ec2:ModifySecurityGroupRules",
-                "ec2:DescribeInstances"
-            ],
-            "Resource": "*"
-        }
-    ]
-}
-```
-
 ## Installation
 
 1. Clone this repository:
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/sernevr/sg-up.git
    cd sg-up
    ```
 
