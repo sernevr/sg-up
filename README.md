@@ -42,6 +42,33 @@ sudo apt-get install -y curl
 brew install curl
 ```
 
+### AWS IAM Policy
+
+The script requires the following minimum IAM permissions:
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ec2:DescribeSecurityGroups",
+                "ec2:DescribeSecurityGroupRules"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "ec2:ModifySecurityGroupRules",
+            "Resource": "arn:aws:ec2:REGION:ACCOUNT_ID:security-group/SG_ID"
+        }
+    ]
+}
+```
+
+Replace `REGION`, `ACCOUNT_ID`, and `SG_ID` with your values (e.g., `arn:aws:ec2:us-east-1:123456789012:security-group/sg-0abc123def456`).
+
 ## Installation
 
 1. Clone this repository:
