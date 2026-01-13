@@ -100,10 +100,10 @@ AWS Security Group Rule IP Updater
 Step 1: Getting current external IP address...
 Current external IP: 203.0.113.42
 
-Step 2: Finding Security Group with description 'Scripted-972151'...
+Step 2: Finding Security Group with description 'your-sg-description'...
 Found Security Group: my-security-group (sg-0123456789abcdef0) in VPC vpc-abcdef01
 
-Step 3: Finding inbound rule with description 'Dev-551836'...
+Step 3: Finding inbound rule with description 'your-rule-description'...
 Found rule: sgr-0123456789abcdef0
   - Current CIDR: 198.51.100.1/32
   - Port range: 3306-3306
@@ -126,21 +126,12 @@ Script completed successfully
 
 The script will exit with an error in the following cases:
 
-- **No Security Group found**: No SG matches the description `Scripted-972151`
+- **No Security Group found**: No SG matches the configured description
 - **Multiple Security Groups found**: More than one SG matches the description
-- **No inbound rule found**: No rule matches the description `Dev-551836`
+- **No inbound rule found**: No rule matches the configured description
 - **Multiple inbound rules found**: More than one rule matches the description
 - **Failed to get external IP**: Unable to reach IP lookup services
 - **AWS API errors**: Permission issues or network problems
-
-## Configuration
-
-To change the Security Group or rule descriptions, edit these variables in `update-sg-rule.sh`:
-
-```bash
-SG_DESCRIPTION="Scripted-972151"
-RULE_DESCRIPTION="Dev-551836"
-```
 
 ## External IP Providers
 
