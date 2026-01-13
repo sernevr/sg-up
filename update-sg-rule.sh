@@ -10,7 +10,6 @@ set -e
 # Configuration
 SG_DESCRIPTION="Scripted-972151"
 RULE_DESCRIPTION="Dev-551836"
-TARGET_PORT=3306
 
 # Colors for output
 RED='\033[0;31m'
@@ -38,23 +37,6 @@ get_external_ip() {
 
     echo ""
     return 1
-}
-
-# Function to test TCP connection
-test_tcp_connection() {
-    local ip=$1
-    local port=$2
-    local timeout=5
-
-    echo -e "${YELLOW}Testing TCP connection to ${ip}:${port}...${NC}"
-
-    if timeout "$timeout" bash -c "echo >/dev/tcp/$ip/$port" 2>/dev/null; then
-        echo -e "${GREEN}SUCCESS: TCP connection to ${ip}:${port} established${NC}"
-        return 0
-    else
-        echo -e "${RED}ERROR: TCP connection to ${ip}:${port} failed${NC}"
-        return 1
-    fi
 }
 
 # Step 1: Get current external IP
@@ -150,28 +132,6 @@ else
         echo -e "${RED}ERROR: Failed to update security group rule${NC}"
         exit 1
     fi
-fi
-echo ""
-
-# Step 5: Test TCP connection to port 3306
-echo "Step 5: Testing connectivity..."
-
-# Get the target IP for connection test (this would typically be the resource protected by the SG)
-# Since we're testing if our IP can reach the target, we need to know where to connect
-# For now, we'll try to get any instance using this security group
-echo "Looking for instances using this security group for connection test..."
-
-INSTANCE_IP=$(aws ec2 describe-instances \
-    --filters "Name=instance.group-id,Values=${SG_ID}" "Name=instance-state-name,Values=running" \
-    --query 'Reservations[*].Instances[*].[PublicIpAddress,PrivateIpAddress]' \
-    --output json | jq -r '.[0][0] | if .[0] != null then .[0] else .[1] end' 2>/dev/null)
-
-if [ -n "$INSTANCE_IP" ] && [ "$INSTANCE_IP" != "null" ]; then
-    echo "Found instance with IP: ${INSTANCE_IP}"
-    test_tcp_connection "$INSTANCE_IP" "$TARGET_PORT" || true
-else
-    echo -e "${YELLOW}INFO: No running instances found using this security group.${NC}"
-    echo -e "${YELLOW}TCP connection test skipped - no target instance available.${NC}"
 fi
 
 echo ""

@@ -8,7 +8,6 @@ This script:
 1. Gets your current external IP address
 2. Updates the wanted rule's IP address (CIDR) with your current external IP
 3. Displays old and new IP addresses
-4. Tests TCP connectivity to port 3306 (if an instance is found using the SG)
 
 ## Prerequisites
 
@@ -91,12 +90,6 @@ New IP: 203.0.113.42 (203.0.113.42/32)
 Applying update...
 SUCCESS: Security group rule updated successfully
 
-Step 5: Testing connectivity...
-Looking for instances using this security group for connection test...
-Found instance with IP: 54.123.45.67
-Testing TCP connection to 54.123.45.67:3306...
-SUCCESS: TCP connection to 54.123.45.67:3306 established
-
 ========================================
 Script completed successfully
 ========================================
@@ -120,7 +113,6 @@ To change the Security Group or rule descriptions, edit these variables in `upda
 ```bash
 SG_DESCRIPTION="Scripted-972151"
 RULE_DESCRIPTION="Dev-551836"
-TARGET_PORT=3306
 ```
 
 ## External IP Providers
